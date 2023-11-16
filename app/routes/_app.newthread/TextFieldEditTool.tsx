@@ -1,0 +1,93 @@
+import { useFormFieldsContext } from '@components/Form';
+import Label from '@components/Label';
+import { cn } from '@lib/utils';
+import clsx from 'clsx';
+import { forwardRef, useEffect, useState } from 'react';
+import {
+  TextField as AriaTextField,
+  Text,
+  type TextFieldProps,
+} from 'react-aria-components';
+import { SwitchTransition } from 'transition-hook';
+import Tiptap from './EditToolTiptap';
+import { use } from 'i18next';
+import Input from '@components/Input';
+
+interface Props extends TextFieldProps {
+  name: string;
+  label?: string;
+  description?: string;
+  errorMessage?: string;
+  labelClassName?: string;
+  inputClassName?: string;
+}
+
+const TextFieldEditTool = forwardRef<HTMLInputElement, Props>(
+  function TextFieldEditTool(
+    {
+      label,
+      labelClassName,
+      inputClassName,
+      description,
+      errorMessage,
+      ...props
+    }: Props,
+    ref
+  ) {
+    const { [props.name]: field } = useFormFieldsContext() ?? {};
+    const [errorDisplay, setErrorDisplay] = useState(
+      errorMessage ?? field?.error
+    );
+    const [content, setContent] = useState<string>('<p></p>');
+    const invalid = !!errorMessage || !!field?.error;
+    useEffect(() => {
+      if (!errorMessage && !field?.error) {
+        return;
+      }
+      setErrorDisplay(errorMessage ?? field?.error);
+    }, [errorMessage, field?.error]);
+    use;
+    return (
+      <AriaTextField {...props} isInvalid={!!props.isInvalid || invalid}>
+        <Label className={cn('mb-0.5', labelClassName)}>{label}</Label>
+        <Tiptap content={content} setContent={setContent} />
+        <Input
+          ref={ref}
+          required={!!props.isRequired}
+          value={content}
+          name={props.name}
+          onChange={(e) => setContent(e.currentTarget.value)}
+          className={cn(inputClassName, {
+            'peer border-negative-500': invalid,
+          })}
+        />
+        <SwitchTransition state={invalid} timeout={200} mode="out-in">
+          {(invalid, stage) => (
+            <div
+              className={clsx(
+                'transition-opacity duration-200 text-sm',
+                {
+                  from: 'opacity-0 ease-in',
+                  enter: '',
+                  leave: 'opacity-0 ease-out',
+                }[stage]
+              )}
+            >
+              {invalid ? (
+                <Text slot="errorMessage" className="text-negative-500">
+                  {errorDisplay + (errorDisplay?.at(-1) === '.' ? '' : '.')}
+                </Text>
+              ) : description ? (
+                <Text slot="description" className="text-primary-700">
+                  {description + (description.at(-1) === '.' ? '' : '.')}
+                </Text>
+              ) : null}
+            </div>
+          )}
+        </SwitchTransition>
+      </AriaTextField>
+    );
+  }
+);
+
+export default TextFieldEditTool;
