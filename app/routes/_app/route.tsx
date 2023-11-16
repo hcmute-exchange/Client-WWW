@@ -2,17 +2,26 @@ import Breadcrumbs from '@components/Breadcrumbs';
 import TextLink from '@components/TextLink';
 import { ChevronRightIcon, HomeIcon } from '@heroicons/react/20/solid';
 import i18next from '@lib/i18n/index.server';
-import { json, type LoaderFunctionArgs } from '@remix-run/node';
-import { useMatches, type UIMatch } from '@remix-run/react';
+import { json, type LoaderFunctionArgs, type Session } from '@remix-run/node';
+import { useMatches, type UIMatch, useLoaderData } from '@remix-run/react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
-import ToolBar from './ToolBar';
+import { authenticate } from '@lib/utils/auth.server';
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({
+  request,
+  context: { session },
+}: LoaderFunctionArgs) {
   const title = await i18next
     .getFixedT(request, 'meta')
-    .then((t) => t('home.title'));
-  return json({ title });
+    .then((x) => x('home.title'));
+  if (await authenticate(session)) {
+    return json({ title, session });
+  } else {
+    session.unset('accessToken');
+    session.unset('refreshToken');
+  }
+  return json({ title, session });
 }
 
 export const handle = {
@@ -33,6 +42,10 @@ function isMatchWithBreadcrumb(
 
 function App() {
   const matches = useMatches();
+  const loaderData = useLoaderData<typeof loader>();
+  const session: Session<SessionData, unknown> | undefined =
+    loaderData.session as Session<SessionData, unknown> | undefined;
+
   const breadcrumbItems = matches
     .filter((x): x is UIMatch<RouteData, Required<RouteHandle>> =>
       isMatchWithBreadcrumb(x)
@@ -59,19 +72,10 @@ function App() {
   )?.title;
 
   return (
-    <div className="flex flex-col lg:flex-row w-full min-h-screen">
-      <Header />
-      <div className="bg-primary-0 flex-grow px-4 py-2">
-        <div className="flex items-center justify-between">
-          <Breadcrumbs items={breadcrumbItems} />
-          <div className="hidden lg:block">
-            <ToolBar />
-          </div>
-        </div>
-        {title ? <h1 className="leading-none">{title}</h1> : null}
-        <div className="mt-4">
-          <Outlet />
-        </div>
+    <div className="flex flex-col max-h-screen">
+      <Header session={session} />
+      <div className="bg-primary-0 flex-grow max-w-screen h-fit">
+        <Outlet />
       </div>
     </div>
   );

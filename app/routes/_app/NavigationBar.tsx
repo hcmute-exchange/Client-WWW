@@ -1,25 +1,27 @@
 import Logo from '@components/Logo';
-import ThemeSwitch from '@components/ThemeSwitch';
 import { AnimatePresence } from 'framer-motion';
 import MenuDropBar from './MenuDropBar';
 import NavigationBarItems from './NavigationBarItems';
 import ToolBar from './ToolBar';
-import type { INavigationBarItem } from './types';
+import type { INavigationBarItem, SessionDataProps } from './types';
+import Button from '@components/Button';
+import Link from '@components/Link';
+import type { Session } from '@remix-run/node';
 
-type Props = {
+type Props = SessionDataProps & {
   navigationItems: INavigationBarItem[];
   toolBarItems: INavigationBarItem[];
 };
+function isEmpty(session: Session<SessionData, unknown> | undefined): boolean {
+  return session ? Object.keys(session.data as Object).length === 0 : true;
+}
 
-export default function NavigationBar({
-  navigationItems,
-  toolBarItems,
-}: Props) {
+export default function NavigationBar({ navigationItems, session }: Props) {
   return (
     <AnimatePresence>
-      <nav className="flex lg:flex-col items-center justify-between gap-8 w-full h-full px-4 py-2 lg:px-0">
-        <div className="flex lg:flex-col gap-4 w-full items-center px-4">
-          <Logo className="w-20 lg:self-start lg:mt-3 lg:ml-3" />
+      <nav className="flex items-center justify-between w-full px-[14rem] py-2">
+        <div className="flex gap-12 h-fit items-center">
+          <Logo className="w-20" />
           <div className="sm:block hidden">
             <NavigationBarItems items={navigationItems} />
           </div>
@@ -27,16 +29,25 @@ export default function NavigationBar({
             <MenuDropBar items={navigationItems}></MenuDropBar>
           </div>
         </div>
-        <div className="lg:mb-3 flex lg:flex-col items-center gap-4">
-          <div className="lg:block hidden">
-            <NavigationBarItems items={toolBarItems} />
-          </div>
-          <div className="text-left mr-3 lg:block hidden">
-            <ThemeSwitch></ThemeSwitch>
-          </div>
-          <div className="lg:hidden block">
-            <ToolBar></ToolBar>
-          </div>
+        <div className="flex items-center gap-4">
+          {isEmpty(session) ? (
+            <div className="flex gap-4">
+              <Button className="">
+                <Link href="/login">Sign in</Link>
+              </Button>
+              <Button
+                variant="primary"
+                className="bg-primary-0 hover:bg-opacity-20 hover:shadow-md
+                text-primary-950 border-2 border-opacity-20 border-primary-950 border-solid"
+              >
+                Sign up
+              </Button>
+            </div>
+          ) : (
+            <div className="block">
+              <ToolBar></ToolBar>
+            </div>
+          )}
         </div>
       </nav>
     </AnimatePresence>
