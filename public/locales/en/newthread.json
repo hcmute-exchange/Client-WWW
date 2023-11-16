@@ -1,0 +1,17 @@
+{
+    "subject": {
+        "lable": "Subject",
+        "desc": "Be specific and imagine you are asking a question to another person",
+        "required": "The subject cannot be empty"
+    },
+    "tag": {
+        "lable":"Tag",
+        "desc":"Add up to 5 tags to describe what your question is about. Start typing to see suggestions.",
+        "required": "Please enter at least one tag."
+    },
+    "body": {
+        "lable":"Body",
+        "desc":"The body of your question contains your problem details and results. Minimum 20 characters.",
+        "required": "Body must be at least 220 characters; you entered 97."
+    }
+}
