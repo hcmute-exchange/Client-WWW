@@ -19,6 +19,10 @@
     "@remix-run/node": "^2.0.1",
     "@remix-run/react": "^2.0.1",
     "@remix-run/serve": "^2.0.1",
+    "@tiptap/extension-color": "^2.1.12",
+    "@tiptap/extension-list-item": "^2.1.12",
+    "@tiptap/react": "^2.1.12",
+    "@tiptap/starter-kit": "^2.1.12",
     "clsx": "^2.0.0",
     "compression": "^1.7.4",
     "express": "^4.18.2",
@@ -40,16 +44,19 @@
     "remix-utils": "^7.0.2",
     "source-map-support": "^0.5.21",
     "tailwind-merge": "^1.14.0",
+    "tiptap": "^1.32.2",
     "transition-hook": "^1.5.2",
     "zod": "^3.22.2"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.0.1",
     "@types/compression": "^1.7.3",
+    "@types/draft-js": "^0.11.14",
     "@types/express": "^4.17.19",
     "@types/morgan": "^1.9.6",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
+    "@types/react-draft-wysiwyg": "^1.13.6",
     "@types/source-map-support": "^0.5.8",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
@@ -66,7 +73,8 @@
     "tailwindcss": "^3.3.3",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-react-aria-components": "^1.0.0-beta.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "unplugin-icons": "^0.17.4"
   },
   "engines": {
     "node": ">=18.0.0"
