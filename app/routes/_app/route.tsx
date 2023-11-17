@@ -25,7 +25,7 @@ export async function loader({
 }
 
 export const handle = {
-  i18n: 'meta',
+  i18n: 'home',
   breadcrumb: true,
 };
 
@@ -67,9 +67,6 @@ function App() {
         </>
       ),
     }));
-  const title = (
-    matches.at(-1)?.data as unknown as Record<string, string | undefined> | null
-  )?.title;
 
   return (
     <div className="flex flex-col max-h-screen">

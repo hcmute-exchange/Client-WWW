@@ -9,9 +9,10 @@ import {
   type TextFieldProps,
 } from 'react-aria-components';
 import { SwitchTransition } from 'transition-hook';
-import Tiptap from './EditToolTiptap';
+import Tiptap from './EditToolTiptap.client';
 import { use } from 'i18next';
 import Input from '@components/Input';
+import { ClientOnly } from 'remix-utils/client-only';
 
 interface Props extends TextFieldProps {
   name: string;
@@ -50,7 +51,9 @@ const TextFieldEditTool = forwardRef<HTMLInputElement, Props>(
     return (
       <AriaTextField {...props} isInvalid={!!props.isInvalid || invalid}>
         <Label className={cn('mb-0.5', labelClassName)}>{label}</Label>
-        <Tiptap content={content} setContent={setContent} />
+        <ClientOnly>
+          {() => <Tiptap content={content} setContent={setContent} />}
+        </ClientOnly>
         <Input
           ref={ref}
           required={!!props.isRequired}

@@ -1,13 +1,18 @@
 @import './theme.css';
+@import './lib/stylesheets/input.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
+@layer base {
   .outline-focus {
     outline: 2px solid theme('colors.accent.400');
     outline-offset: 1px;
+  }
+  .outline-focus-within {
+    outline: 2px dashed theme('colors.accent.400');
+    @apply rounded;
   }
 }
 

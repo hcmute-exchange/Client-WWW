@@ -15,8 +15,8 @@ export async function loader({
   context: { session },
 }: LoaderFunctionArgs) {
   const title = await i18next
-    .getFixedT(request, 'meta')
-    .then((x) => x('home.title'));
+    .getFixedT(request, 'home')
+    .then((x) => x('meta.title'));
   if (await authenticate(session)) {
     return json({ title, session });
   } else {

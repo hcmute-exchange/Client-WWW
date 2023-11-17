@@ -9,9 +9,11 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { Transition } from '@headlessui/react';
 import ProgressCircle from '@components/ProgressCircle';
-import TextFieldEditTool from './TextFieldEditTool';
+import TextFieldEditTool from './TextFieldEditTool.client';
 import i18next from '@lib/i18n/index.server';
 import type { ActionFunctionArgs } from '@remix-run/node';
+import { ClientOnly } from 'remix-utils/client-only';
+
 interface FieldValues {
   subject: string;
   body: string;
@@ -62,16 +64,20 @@ function route() {
             labelClassName="font-semibold text-primary-950"
             inputClassName="bg-primary-50"
           />
-          <TextFieldEditTool
-            isRequired
-            name="body"
-            type="text"
-            label={t('body.lable')}
-            description={t('body.desc')}
-            className="grid"
-            labelClassName="font-semibold text-primary-950"
-            inputClassName="hidden"
-          />
+          <ClientOnly>
+            {() => (
+              <TextFieldEditTool
+                isRequired
+                name="body"
+                type="text"
+                label={t('body.lable')}
+                description={t('body.desc')}
+                className="grid"
+                labelClassName="font-semibold text-primary-950"
+                inputClassName="hidden"
+              />
+            )}
+          </ClientOnly>
 
           <TextField
             isRequired

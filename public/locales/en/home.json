@@ -1,5 +1,8 @@
 {
-    "bar": {
+    "meta": {
+        "title": "Homepage"
+    },
+    "navigation": {
         "home": "Home",
         "threads": "Threads",
         "setting": "Setting"

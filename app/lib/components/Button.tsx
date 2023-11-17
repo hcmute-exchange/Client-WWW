@@ -1,45 +1,56 @@
 import { cn } from '@lib/utils';
-import type { ReactNode } from 'react';
+import { forwardRef, type ForwardedRef, type ReactNode, type Ref } from 'react';
 import { Button as AriaButton, type ButtonProps } from 'react-aria-components';
-import Link from './Link';
+import Link, { type LinkProps } from './Link';
 
-interface DefaultProps extends ButtonProps {
-  variant?: 'accent' | 'primary';
+interface BaseProps {
+  size?: 'sm' | 'md';
+  variant?: 'accent' | 'primary' | 'negative';
 }
+
+type DefaultProps = BaseProps & ButtonProps;
 
 type Props =
   | ({ as?: never } & DefaultProps)
-  | ({ as: 'link'; variant?: 'accent' | 'primary' } & Parameters<
-      typeof Link
-    >[0]);
+  | ({ as: 'link' } & BaseProps & Omit<LinkProps, 'href'> & { href: string });
 
 const baseClass =
-  'px-4 py-0.5 rounded-lg transition-[background-color_outline] ease-in-out font-medium';
+  'leading-none rounded-lg transition-[background-color_outline] ease-in-out font-medium';
 
 const variantClass: Record<NonNullable<Props['variant']>, string> = {
-  accent: 'bg-accent-500 text-primary-100 rac-hover:bg-accent-600',
+  accent: 'bg-accent-500 text-primary-100 hover:bg-accent-600',
   primary: 'bg-primary-900 text-primary-100',
+  negative: 'bg-negative-500 text-primary-100',
 };
 
-const disabledClass =
-  'rac-disabled:bg-primary-300 rac-disabled:text-primary-500';
+const sizeClass: Record<NonNullable<Props['size']>, string> = {
+  sm: 'p-1',
+  md: 'px-4 py-2',
+};
+
+const disabledClass = 'disabled:bg-primary-300 disabled:text-primary-500';
 
 export function buildVariantClass(variant: NonNullable<Props['variant']>) {
   return cn(baseClass, variantClass[variant]);
 }
 
-export default function Button({
-  className,
-  variant = 'accent',
-  ...props
-}: Props) {
+function Button(
+  { className, size = 'md', variant = 'accent', ...props }: Props,
+  ref: ForwardedRef<HTMLAnchorElement | HTMLButtonElement>
+) {
   let node: ReactNode;
   switch (props.as) {
     case 'link': {
       node = (
         <Link
           {...props}
-          className={cn(baseClass, variantClass[variant], className)}
+          ref={ref as Ref<HTMLAnchorElement>}
+          className={cn(
+            baseClass,
+            variantClass[variant],
+            sizeClass[size],
+            className
+          )}
         />
       );
       break;
@@ -48,9 +59,11 @@ export default function Button({
       node = (
         <AriaButton
           {...props}
+          ref={ref as Ref<HTMLButtonElement>}
           className={cn(
             baseClass,
             variantClass[variant],
+            sizeClass[size],
             disabledClass,
             className
           )}
@@ -62,3 +75,5 @@ export default function Button({
 
   return node;
 }
+
+export default forwardRef(Button);
