@@ -1,6 +1,5 @@
-export interface Department {
+export interface View {
   id: string;
   createdTime: string;
   updatedTime: string;
-  name: string;
 }

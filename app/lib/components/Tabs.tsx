@@ -19,7 +19,7 @@ type Props = Omit<TabsProps, 'items'> & {
 const baseClass1 = 'flex flex-col gap-5 outline-none';
 const baseClass2 = 'flex gap-4';
 const baseClass3 =
-  'px-2 py-1 cursor-pointer pb-5 w-fit rac-selected:text-accent-500 font-medium rac-selected:border-b-2 border-accent-400 border-solid outline-none';
+  'px-2 py-1 cursor-pointer pb-5 w-fit selected:text-accent-500 font-medium selected:border-b-2 border-accent-400 border-solid outline-none';
 function Tabs({ items, className, tabListclassName, tabclassName }: Props) {
   return (
     <AriaTabs className={cn(baseClass1, className)}>

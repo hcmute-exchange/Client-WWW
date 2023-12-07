@@ -4,7 +4,7 @@ import { createContext, useContext } from 'react';
 
 type Props<
   Output extends Record<string, any>,
-  Input extends Record<string, any> = Output
+  Input extends Record<string, any> = Output,
 > = FormProps & {
   config?: FormConfig<Output, Input>;
 };
@@ -14,7 +14,7 @@ const FieldsContext = createContext<Fieldset<Record<string, unknown>> | null>(
 );
 
 export function useFormFieldsContext<
-  Schema extends Record<string, any> | undefined
+  Schema extends Record<string, any> | undefined,
 >() {
   return useContext<Fieldset<Schema> | null>(FieldsContext as any);
 }

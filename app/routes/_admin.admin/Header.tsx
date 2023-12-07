@@ -38,7 +38,7 @@ export default function Header() {
     },
     {
       text: 'Manage message',
-      href: '/admin/message',
+      href: '/admin/managemessage',
       icon: <Cog6ToothIcon className="w-5 h-5" />,
     },
   ];

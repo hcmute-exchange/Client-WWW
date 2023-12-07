@@ -15,7 +15,7 @@ export default function NavigationBarItems({
   return (
     <ul className={`flex gap-2`}>
       {items.map((i, idx) => (
-        <li key={idx} className="relative">
+        <li key={idx} className="relative list-none">
           {pathname.startsWith(i.href) && (
             <motion.div
               layoutId="underline"

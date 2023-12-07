@@ -1,0 +1,24 @@
+{
+    "welcomeBack": "Welcome to forum",
+    "h1": "Sign up to Forum",
+    "email": {
+      "label": "Email address",
+      "required": "Enter a valid email address",
+      "invalid": "Enter a valid email address"
+    },
+    "password": {
+      "label": "Password",
+      "required": "Enter a password"
+    },
+    "comfirmpassword": {
+        "label": "Password",
+        "required": "Password doesnt match"
+    },
+    "rememberMe": {
+      "label": "Remember me"
+    },
+    "forgotPassword": "Forgot password",
+    "signIn": "Sign in",
+    "unknownError": "Unable to process your request"
+  }
+  

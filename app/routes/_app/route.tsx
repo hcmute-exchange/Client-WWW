@@ -2,11 +2,18 @@ import Breadcrumbs from '@components/Breadcrumbs';
 import TextLink from '@components/TextLink';
 import { ChevronRightIcon, HomeIcon } from '@heroicons/react/20/solid';
 import i18next from '@lib/i18n/index.server';
-import { json, type LoaderFunctionArgs, type Session } from '@remix-run/node';
+import {
+  json,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+  type Session,
+} from '@remix-run/node';
 import { useMatches, type UIMatch, useLoaderData } from '@remix-run/react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import { authenticate } from '@lib/utils/auth.server';
+import { schemaSearch } from '../_app._index/route';
+import { parseSubmissionAsync } from '@lib/utils';
 
 export async function loader({
   request,
@@ -40,7 +47,7 @@ function isMatchWithBreadcrumb(
   );
 }
 
-function App() {
+function route() {
   const matches = useMatches();
   const loaderData = useLoaderData<typeof loader>();
   const session: Session<SessionData, unknown> | undefined =
@@ -78,4 +85,19 @@ function App() {
   );
 }
 
-export default App;
+export default route;
+
+// export async function action({
+//   request,
+//   context: { session },
+// }: ActionFunctionArgs) {
+//   const t = await i18next.getFixedT(request);
+//   const formData = await request.formData();
+//   const submission = await parseSubmissionAsync(formData, {
+//     schema: schemaSearch(t),
+//   });
+//   console.log('asdas');
+//   if (!submission.ok) {
+//     return json(submission);
+//   }
+// }

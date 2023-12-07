@@ -15,7 +15,7 @@
     "paths": {
       "@components/*": ["./app/lib/components/*"],
       "@lib/*": ["./app/lib/*"],
-      "~/*": ["./app/*"]
+      "~/*": ["./app/*"],
     },
     "verbatimModuleSyntax": true,
 

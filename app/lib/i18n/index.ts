@@ -9,6 +9,7 @@ export const config = {
     'reset-password-$token',
     'home',
     'newthread',
+    'signup',
   ],
   react: { useSuspense: false },
   keySeparator: '.',

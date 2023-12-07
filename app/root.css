@@ -116,5 +116,24 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-primary-700 rounded-lg;
   }
-
+  blockquote {
+    border-left: 4px solid theme('colors.primary.500');
+    padding-left: 1rem;
+  }
+  ul.a, ul.li {
+    list-style-type: circle;
+  }
+  
+  ul.b {
+    list-style-type: square;
+  }
+  
+  ol.c {
+    list-style-type: upper-roman;
+  }
+  
+ 
+  ul li {
+    list-style: circle;
+  }
 }

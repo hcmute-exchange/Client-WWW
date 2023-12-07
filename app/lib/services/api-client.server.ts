@@ -1,5 +1,5 @@
 import { problemDetailsSchema } from '@lib/schemas/problem-details.server';
-import { ResultAsync, errAsync, fromPromise, ok } from 'neverthrow';
+import { ResultAsync, err, errAsync, fromPromise, ok } from 'neverthrow';
 
 interface ApiClientOptions {
   baseUrl: string;
@@ -32,6 +32,9 @@ export class ApiError extends Error {
     return this.details_;
   }
 
+  public static from(
+    details: Zod.infer<typeof problemDetailsSchema>
+  ): Promise<ApiError>;
   public static async from(details: unknown) {
     const data = await problemDetailsSchema.parseAsync(details);
     return new ApiError(data);
@@ -99,7 +102,15 @@ export class ApiClient {
     ).andThen((x) =>
       x.ok
         ? ok(x)
-        : errAsync(x.json()).mapErr(async (x) => ApiError.from(await x))
+        : fromPromise(x.json(), () => undefined)
+            .andThen((x) => err(ApiError.from(x)))
+            .mapErr(() =>
+              ApiError.from({
+                status: x.status,
+                title: x.statusText,
+                type: 'https://tools.ietf.org/html/rfc7231#section-6.5.5',
+              })
+            )
     );
   }
 
@@ -116,6 +127,12 @@ export class ApiClient {
       method: 'POST',
     });
   }
+  public put(input: string | URL, options?: RequestOptions) {
+    return this.fetch(input, {
+      ...options,
+      method: 'PUT',
+    });
+  }
 
   public delete(input: string | URL, options?: RequestOptions) {
     return this.fetch(input, {
@@ -123,13 +140,18 @@ export class ApiClient {
       method: 'DELETE',
     });
   }
-
+  public head(input: string | URL, options?: RequestOptions) {
+    return this.fetch(input, {
+      ...options,
+      method: 'HEAD',
+    });
+  }
   private static makeHeaders(headers?: HeadersInit): Record<string, string> {
     if (!headers) return {};
     return Array.isArray(headers)
       ? Object.fromEntries(headers)
       : headers instanceof Headers
-      ? Object.fromEntries(headers.entries())
-      : headers;
+        ? Object.fromEntries(headers.entries())
+        : headers;
   }
 }
